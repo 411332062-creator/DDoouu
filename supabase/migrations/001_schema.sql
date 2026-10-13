@@ -8,8 +8,7 @@
 
 create table if not exists public.profiles (
   user_id uuid primary key references auth.users (id) on delete cascade,
-  nickname text not null,
-  updated_at timestamptz not null default now()
+  nickname text not null
 );
 
 create table if not exists public.messages (
@@ -180,10 +179,11 @@ begin
       values (v_key, v_nickname, v_uid, 'current', v_until);
   end if;
 
-  insert into public.profiles (user_id, nickname, updated_at)
-    values (v_uid, v_nickname, v_now)
+  -- 個人資料只存身分編號和暱稱，不記錄任何時間，別人看不出這個人什麼時候上線或改名
+  insert into public.profiles (user_id, nickname)
+    values (v_uid, v_nickname)
     on conflict (user_id) do update
-      set nickname = excluded.nickname, updated_at = excluded.updated_at
+      set nickname = excluded.nickname
       where public.profiles.nickname is distinct from excluded.nickname;
 
   return json_build_object(

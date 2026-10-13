@@ -163,6 +163,13 @@ button:disabled {
   color: var(--muted);
 }
 
+.btn--busy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
 .btn--outline {
   border: 1px solid var(--line);
   background: transparent;

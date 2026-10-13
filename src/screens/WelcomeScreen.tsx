@@ -141,8 +141,15 @@ export function WelcomeScreen({ loading, identity, failed, theme, onToggleTheme,
         </div>
 
         <div className="welcome__enter">
-          <button type="submit" className="btn btn--primary btn--large" disabled={!canEnter}>
-            進入聊天室
+          <button type="submit" className="btn btn--primary btn--large btn--busy" disabled={!canEnter}>
+            {entering ? (
+              <>
+                <SpinnerIcon size={20} />
+                <span>進入中…</span>
+              </>
+            ) : (
+              '進入聊天室'
+            )}
           </button>
           <p className="welcome__note">不用註冊。所有人都看得到這裡的訊息，請不要輸入個人資料。</p>
         </div>

@@ -8,7 +8,10 @@
 
 ## 目前階段
 
-目前在**階段一**：還沒接 Supabase，前端用假後端（示範模式）。定義見 docs/architecture.md 第 4 節，完成標準見第 13.1 節。
+目前在**階段二**：前端已經接上 Supabase（`src/chat/supabase/`），資料庫的結構和規則在 `supabase/migrations/`。定義見 docs/architecture.md 第 4 節，完成標準見第 13.2 節。
+
+- 用哪個後端由設定值 `VITE_CHAT_BACKEND` 決定：`supabase` 是正式模式，`mock` 是階段一的示範模式（假後端仍然保留，可以退回）。
+- 改資料庫時，在 `supabase/migrations/` 新增 SQL 檔，由專案擁有者貼到 Supabase 後台的 SQL Editor 執行；不使用 Supabase CLI。
 
 ## 金鑰
 

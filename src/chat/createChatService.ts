@@ -1,10 +1,11 @@
 // 依設定決定用假後端還是 Supabase（docs/architecture.md 4.3）。
-// 階段二：在 chat/supabase/ 新增連接器，然後只改這個檔案。
+// 畫面不知道用的是哪一個；要切換只改設定值 VITE_CHAT_BACKEND。
 
 import { createElement, type ComponentType } from 'react';
 import type { ChatService } from './types';
 import { MockChatService } from './mock/MockChatService';
 import { DevPanel } from './mock/DevPanel';
+import { SupabaseChatService } from './supabase/SupabaseChatService';
 
 export interface ChatBackend {
   service: ChatService;
@@ -15,13 +16,14 @@ export interface ChatBackend {
 
 export function createChatBackend(): ChatBackend {
   const mode = import.meta.env.VITE_CHAT_BACKEND ?? 'mock';
+  const url = import.meta.env.VITE_SUPABASE_URL;
+  const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
   if (mode === 'supabase') {
-    const ready = import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-    console.warn(
-      ready
-        ? 'Supabase 連接器要到階段二才有，先使用示範模式。'
-        : '設定成正式模式但沒有提供 Supabase 的網址和公開金鑰，先使用示範模式。',
-    );
+    if (url && key) {
+      return { service: new SupabaseChatService(url, key), demo: false, DevTools: null };
+    }
+    console.warn('設定成正式模式但沒有提供 Supabase 的網址和公開金鑰，先使用示範模式。');
   }
 
   const mock = new MockChatService();
